@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    // redirect if user is not logged in
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '../index.html';
+    }
+  </script>
+</head>
+<body>
+  <button id="logout">Log out</button>
+  <a href="./round.html" id="round">Round</a>
+  <div id="error"></div>
+  <script>
+    const logout = () => {
+      localStorage.removeItem('token');
+      window.location.href = '../index.html';
+    };
+
+    document.getElementById('logout').addEventListener('click', logout);
+    const roundButton = document.getElementById('round');
+    
+    fetch('https://treasurehunt-backend-nine.vercel.app/api/event/round', {
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('You are not authorized to view this page');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        roundButton.textContent = `Round ${data.round}`;
+      })
+      .catch(err => {
+        console.error(err);
+        // window.location.href = '../index.html';
+      });    
+  </script>
+</body>
+</html>
