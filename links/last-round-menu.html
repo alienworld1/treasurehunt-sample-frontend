@@ -11,6 +11,24 @@
       window.location.href = '../index.html';
     }
 
+    fetch('https://treasurehunt-backend-nine.vercel.app/leaderboard/completed-rounds', {
+      method: 'GET',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.completedRounds === 11) {
+          window.location.href = './completed.html';
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      });
+
+
     fetch('https://treasurehunt-backend-nine.vercel.app/event/current-round', {
       method: 'GET',
       headers: {
@@ -27,6 +45,7 @@
       .catch(err => {
         window.location.href = './menu.html';
       });
+
   </script>
 </head>
 <body>
