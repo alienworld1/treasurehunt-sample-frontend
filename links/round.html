@@ -20,6 +20,7 @@
   <form action="" method="post" id="question-form">
     <fieldset>
       <legend>Question</legend>
+      <p id="question"></p>
       <label for="solution" id="questionlabel">Loading question...</label>
       <input type="text" id="solution" name="solution" placeholder="Your answer goes here..." required>
       <button type="submit">Submit</button>
@@ -27,15 +28,12 @@
     </fieldset>
   </form>
   <div class="correct" style="color: green;"></div>
-  <button id="hint">Hint</button>
-  <div id="hint-box"></div>
   <script>
     const questionForm = document.getElementById('question-form');
     const error = document.getElementById('error');
 
     const questionLabel = document.getElementById('questionlabel');
-    const hintBox = document.getElementById('hint-box');
-    let hint;
+    const questionElement = document.getElementById('question');
 
     function startCountdown(endTime) {
       let interval;
@@ -74,16 +72,17 @@
       })
       .then(data => {
         console.log(data);
-        questionLabel.textContent = `${data.question}`;
+        questionLabel.textContent = data.question;
+        questionElement.textContent = data.hint;
         if (data.image_url) {
           document.getElementById('image').innerHTML = `<img src=${data.image_url}/>`;
         }
 
-        hint = data.hint;
+        const timeAlloted = data.round === '4' ? 20 * 60000 : 10 * 60000;
 
         const endTime = data.startTime ? 
-          new Date(data.startTime).getTime() + 10 * 60000 : 
-          new Date().getTime() + 10 * 60000;
+          new Date(data.startTime).getTime() + timeAlloted : 
+          new Date().getTime() + timeAlloted;
 
         startCountdown(new Date(endTime));
       })
@@ -92,10 +91,6 @@
         // window.location.href = '../index.html';
       });
     
-    document.getElementById('hint').addEventListener('click', () => {
-      hintBox.textContent = hint;
-    });
-
     questionForm.addEventListener('submit', async e => {
       e.preventDefault();
 
