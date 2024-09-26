@@ -16,6 +16,7 @@
   <button id="logout">Log out</button>
   <a href="./round.html" id="round">Round</a>
   <div id="error"></div>
+  <div id="timer"></div>
   <script>
     const logout = () => {
       localStorage.removeItem('token');
@@ -24,8 +25,33 @@
 
     document.getElementById('logout').addEventListener('click', logout);
     const roundButton = document.getElementById('round');
+
+    function startCountdown(timeString) {
+      let [hours, minutes, seconds] = timeString.split(':').map(Number);
+            let totalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+            function updateTimer() {
+                if (totalSeconds <= 0) {
+                    clearInterval(interval);
+                    document.getElementById('timer').innerText = '00:00:00';
+                    return;
+                }
+
+                totalSeconds--;
+
+                let hrs = Math.floor(totalSeconds / 3600);
+                let mins = Math.floor((totalSeconds % 3600) / 60);
+                let secs = totalSeconds % 60;
+
+                document.getElementById('timer').innerText = 
+                    `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }
+
+            updateTimer();
+      let interval = setInterval(updateTimer, 1000);
+    }
     
-    fetch('https://treasurehunt-backend-nine.vercel.app/api/event/round', {
+    fetch('https://treasurehunt-backend-nine.vercel.app/event/current-round', {
       headers: {
         Authorization: token,
         'Content-Type': 'application/json',
@@ -39,12 +65,24 @@
       })
       .then(data => {
         console.log(data);
-        roundButton.textContent = `Round ${data.round}`;
+        roundButton.textContent = `Round ${data.currentRound}`;
       })
       .catch(err => {
         console.error(err);
         // window.location.href = '../index.html';
-      });    
+      });
+    
+    fetch('https://treasurehunt-backend-nine.vercel.app/event/timer', {
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        startCountdown(data.time);
+      }).catch(err => console.error(err));
   </script>
 </body>
 </html>
