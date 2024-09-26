@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '../index.html';
+    }
+  </script>
+</head>
+<body>
+  <p id="message"></p>
+  <script>
+    const message = document.getElementById('message');
+    async function displayMessage() {
+      const roundsResponse = await fetch('https://treasurehunt-backend-nine.vercel.app/leaderboard/completed-rounds', {
+        headers: {
+          Authorization: token,
+          'Content-Type': 'application/json',
+        },
+      });
+      const rounds = await roundsResponse.json();  
+      if (rounds.completedRounds === 11) {
+        message.textContent = 'Congratulations! Your team has completed the event.';
+      } else {
+        message.textContent = 'Please wait for your teammates to complete the event.';
+      }
+    }
+    // run the function every minute
+    displayMessage();
+    setInterval(displayMessage, 60 * 1000);
+  </script>
+</body>
+</html>
