@@ -65,6 +65,12 @@
       })
       .then(data => {
         console.log(data);
+        
+        if (data.currentRound === '8') {
+          window.location.href = './last-round-menu.html';
+          return;
+        }
+
         roundButton.textContent = `Round ${data.currentRound}`;
       })
       .catch(err => {
