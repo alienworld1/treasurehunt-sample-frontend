@@ -47,6 +47,7 @@
       <div id="error" style="color: red;"></div>
     </fieldset>
   </form>
+  <div id="hint"></div>
   <div class="correct" style="color: green;"></div>
   <script>
     const questionForm = document.getElementById('question-form');
@@ -54,6 +55,8 @@
 
     const questionLabel = document.getElementById('questionlabel');
     const questionElement = document.getElementById('question');
+
+    let hint = null;
 
     function startCountdown(endTime) {
       let interval;
@@ -64,6 +67,7 @@
           if (timeDiff <= 0) {
               clearInterval(interval);
               document.getElementById('timer').innerText = '00:00';
+              document.getElementById('hint').innerText = hint ?? 'No hint available';
               return;
           }
 
@@ -102,6 +106,7 @@
           const imageUrl = `https://drive.google.com/thumbnail?id=${imageId}`;
           document.getElementById('image').innerHTML = `<img src=${imageUrl}>`;
         }
+        hint = data.questionHint;
 
         const timeAlloted = data.round === '4' ? 20 * 60000 : 10 * 60000;
 

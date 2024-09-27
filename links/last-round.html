@@ -18,9 +18,7 @@
 </head>
 <body>
   <!-- If there's an image, it will be displayed here: -->
-  <div id="image"></div>
-
-  <div id="timer"></div>
+  <!-- <div id="image"></div> -->
   <form action="" method="post" id="question-form">
     <fieldset>
       <legend>Question</legend>
@@ -39,29 +37,6 @@
     const questionLabel = document.getElementById('questionlabel');
     const questionElement = document.getElementById('questionelement');
 
-    function startCountdown(endTime) {
-      let interval;
-      function updateTimer() {
-          let now = new Date();
-          let timeDiff = endTime - now;
-
-          if (timeDiff <= 0) {
-              clearInterval(interval);
-              document.getElementById('timer').innerText = '00:00';
-              return;
-          }
-
-          let minutes = Math.floor(timeDiff / 60000);
-          let seconds = Math.floor((timeDiff % 60000) / 1000);
-
-          document.getElementById('timer').innerText = 
-              `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        }
-
-      updateTimer();
-      setInterval(updateTimer, 1000);
-    } 
-
     fetch(`https://treasurehunt-backend-nine.vercel.app/event/last/last-round?token=${currentRound}`, {
       headers: {
         Authorization: token,
@@ -78,15 +53,9 @@
         console.log(data);
         questionLabel.textContent = data.question;
         questionElement.textContent = data.hint;
-        if (data.image_url) {
-          document.getElementById('image').innerHTML = `<img src=${data.image_url}/>`;
-        }
-
-        const endTime = data.startTime ? 
-          new Date(data.startTime).getTime() + 10 * 60000 : 
-          new Date().getTime() + 10 * 60000;
-
-        startCountdown(new Date(endTime));
+        // if (data.image_url) {
+        //   document.getElementById('image').innerHTML = `<img src=${data.image_url}/>`;
+        // }
       })
       .catch(err => {
         console.error(err);
