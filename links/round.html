@@ -10,6 +10,26 @@
       if (!token) {
         window.location.href = '../index.html';
       }    
+      
+      function extractGoogleDriveFileId(url) {
+        // Regular expression to match Google Drive file ID patterns
+        const patterns = [
+          /\/file\/d\/([a-zA-Z0-9_-]{33})/,  // Format: /file/d/{fileId}
+          /id=([a-zA-Z0-9_-]{33})/,          // Format: id={fileId}
+          /([a-zA-Z0-9_-]{33})/              // Fallback: try to match any 33-character ID
+        ];
+
+        for (const pattern of patterns) {
+          const match = url.match(pattern);
+          if (match && match[1]) {
+            // Remove the last character
+            return match[1];
+          }
+        }
+
+        // If no match is found, return null
+        return null;
+      }
   </script>
 </head>
 <body>
@@ -75,7 +95,9 @@
         questionLabel.textContent = data.question;
         questionElement.textContent = data.hint;
         if (data.image_url) {
-          document.getElementById('image').innerHTML = `<img src=${data.image_url}/>`;
+          const imageId = extractGoogleDriveFileId(data.image_url);
+          const imageUrl = `https://drive.google.com/thumbnail?id=${imageId}`;
+          document.getElementById('image').innerHTML = `<img src=${imageUrl}>`;
         }
 
         const timeAlloted = data.round === '4' ? 20 * 60000 : 10 * 60000;
