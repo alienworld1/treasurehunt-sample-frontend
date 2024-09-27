@@ -39,7 +39,31 @@
       // This token holds the user information
       localStorage.setItem('token', data.token);
 
-      window.location.href = './links/menu.html';
+      fetch('https://treasurehunt-backend-nine.vercel.app/leaderboard/completed-rounds', {
+        headers: {
+          Authorization: data.token,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('You are not logged in');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log(data);
+          if (data.completedRounds < 8) {
+            window.location.href = './links/menu.html';
+          } else if (data.completedRounds < 11) {
+            window.location.href = './links/last-round-menu.html';
+          } else {
+            window.location.href = './links/completed.html';
+          };
+        })
+        .catch(error => {
+          console.error(error);
+        });
     });
   </script>
 </body>

@@ -13,7 +13,15 @@
 </head>
 <body>
   <p id="message"></p>
+  <a href="./leaderboard.html">Leaderboard</a>
+  <button id="logout">Logout</button>
   <script>
+    const logout = () => {
+      localStorage.removeItem('token');
+      window.location.href = '../index.html';
+    };
+    document.getElementById('logout').addEventListener('click', logout);
+
     const message = document.getElementById('message');
     async function displayMessage() {
       const roundsResponse = await fetch('https://treasurehunt-backend-nine.vercel.app/leaderboard/completed-rounds', {
