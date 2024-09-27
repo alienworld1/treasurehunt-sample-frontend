@@ -38,7 +38,7 @@
     })
       .then(res => res.json())
       .then(data => {
-        if (data.currentRound !== '8') {
+        if (parseInt(data.current_round) < 8) {
           window.location.href = './menu.html';
         }
       })
@@ -55,6 +55,7 @@
       <ul id="links"></ul>
     </nav>
   <div id="error"></div>
+  <div id="path"></div>
   <a href="./leaderboard.html">Leaderboard</a>
   <script>
     const logout = () => {
@@ -110,6 +111,7 @@
           const btn = createButton(round);
           links.appendChild(btn);
         });
+        document.getElementById('path').textContent = `Path: ${data.path}`;
       });
   </script>
 </body>

@@ -18,6 +18,7 @@
   <div id="error"></div>
   <div id="timer"></div>
   <div id="venue"></div>
+  <div id="path"></div>
   <a href="./leaderboard.html">Leaderboard</a>
   <script>
     const logout = () => {
@@ -66,7 +67,7 @@
         return response.json();
       })
       .then(data => {
-        
+        console.log(data);
         if (data.currentRound === '8') {
           window.location.href = './last-round-menu.html';
           return;
@@ -76,6 +77,7 @@
         if (data.venue) {
           document.getElementById('venue').textContent = `Next Round Venue: ${data.venue}`;
         }
+        document.getElementById('path').textContent = `Path: ${data.userPath}`;
       })
       .catch(err => {
         console.error(err);

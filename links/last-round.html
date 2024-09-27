@@ -29,6 +29,7 @@
       <div id="error" style="color: red;"></div>
     </fieldset>
   </form>
+  <div id="path"></div>
   <div class="correct" style="color: green;"></div>
   <script>
     const questionForm = document.getElementById('question-form');
@@ -50,11 +51,9 @@
         return response.json();
       })
       .then(data => {
-        questionLabel.textContent = data.question;
-        questionElement.textContent = data.hint;
-        // if (data.image_url) {
-        //   document.getElementById('image').innerHTML = `<img src=${data.image_url}/>`;
-        // }
+        questionLabel.textContent = data.round.question;
+        questionElement.textContent = data.round.hint;
+        document.getElementById('path').textContent = data.round.path;
       })
       .catch(err => {
         console.error(err);

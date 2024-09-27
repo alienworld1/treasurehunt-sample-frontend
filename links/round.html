@@ -35,7 +35,7 @@
 <body>
   <!-- If there's an image, it will be displayed here: -->
   <div id="image"></div>
-
+  <div id="path"></div>
   <div id="timer"></div>
   <form action="" method="post" id="question-form">
     <fieldset>
@@ -95,22 +95,22 @@
         return response.json();
       })
       .then(data => {
-        questionLabel.textContent = data.question;
+        questionLabel.textContent = data.round.question;
         if (data.round === '4') {
-          questionLabel.innerHTML = `<a href="${data.question}" target="_blank">Download the minigame here</a>`;
+          questionLabel.innerHTML = `<a href="${data.round.question}" target="_blank">Download the minigame here</a>`;
         }
-        questionElement.textContent = data.hint;
-        if (data.image_url) {
-          const imageId = extractGoogleDriveFileId(data.image_url);
+        questionElement.textContent = data.round.hint;
+        if (data.round.image_url) {
+          const imageId = extractGoogleDriveFileId(data.round.image_url);
           const imageUrl = `https://drive.google.com/thumbnail?id=${imageId}`;
           document.getElementById('image').innerHTML = `<img src=${imageUrl}>`;
         }
-        hint = data.questionHint;
+        hint = data.round.questionHint;
+        document.getElementById('path').textContent = `Path: ${data.path}`;
+        const timeAlloted = data.round.round === '4' ? 20 * 60000 : 10 * 60000;
 
-        const timeAlloted = data.round === '4' ? 20 * 60000 : 10 * 60000;
-
-        const endTime = data.startTime ? 
-          new Date(data.startTime).getTime() + timeAlloted : 
+        const endTime = data.round.startTime ? 
+          new Date(data.round.startTime).getTime() + timeAlloted : 
           new Date().getTime() + timeAlloted;
 
         startCountdown(new Date(endTime));
