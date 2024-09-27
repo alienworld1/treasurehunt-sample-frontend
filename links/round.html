@@ -95,7 +95,6 @@
         return response.json();
       })
       .then(data => {
-        console.log(data);
         questionLabel.textContent = data.question;
         if (data.round === '4') {
           questionLabel.innerHTML = `<a href="${data.question}" target="_blank">Download the minigame here</a>`;

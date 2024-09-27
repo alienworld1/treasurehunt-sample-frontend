@@ -50,7 +50,6 @@
         return response.json();
       })
       .then(data => {
-        console.log(data);
         questionLabel.textContent = data.question;
         questionElement.textContent = data.hint;
         // if (data.image_url) {

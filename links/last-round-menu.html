@@ -105,7 +105,6 @@
     })
       .then(res => res.json())
       .then(data => {
-        console.log(data.message ?? '');
         const links = document.getElementById('links');
         data.availableRounds?.forEach(round => {
           const btn = createButton(round);
