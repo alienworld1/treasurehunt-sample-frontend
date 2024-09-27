@@ -17,6 +17,7 @@
   <a href="./round.html" id="round">Round</a>
   <div id="error"></div>
   <div id="timer"></div>
+  <div id="venue"></div>
   <a href="./leaderboard.html">Leaderboard</a>
   <script>
     const logout = () => {
@@ -73,6 +74,9 @@
         }
 
         roundButton.textContent = `Round ${data.currentRound}`;
+        if (data.venue) {
+          document.getElementById('venue').textContent = `Next Round Venue: ${data.venue}`;
+        }
       })
       .catch(err => {
         console.error(err);
