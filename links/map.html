@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centered Image with Back Button</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- <style>
+        /* Ensure the body takes up the full height of the viewport */
+        body {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            flex-direction: column; /* Arrange items vertically */
+            height: 100vh; /* Full viewport height */
+            margin: 0;
+            background-color: black;
+        }
+
+        img {
+            max-width: 100%; /* Ensure the image doesn't overflow the page */
+            height: auto; /* Keep the aspect ratio */
+        }
+
+        /* Back button styling */
+        #back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style> -->
+</head>
+<body>
+
+    <!-- Back Button -->
+    <button id="back-button">Back</button>
+
+    <img src="WhatsApp Image 2024-09-22 at 16.01.45_f39e8d03.jpg" alt="Centered Image">
+
+    <script>
+        // Back button functionality
+        document.getElementById('back-button').addEventListener('click', () => {
+            window.history.back(); // Navigate to the previous page
+        });
+    </script>
+
+</body>
+</html>

@@ -4,59 +4,102 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <script>
-      // redirect if user is not logged in
-      const token = localStorage.getItem('token');
-      if (!token) {
-        window.location.href = '../index.html';
-      }    
-      
-      function extractGoogleDriveFileId(url) {
-        // Regular expression to match Google Drive file ID patterns
-        const patterns = [
-          /\/file\/d\/([a-zA-Z0-9_-]{33})/,  // Format: /file/d/{fileId}
-          /id=([a-zA-Z0-9_-]{33})/,          // Format: id={fileId}
-          /([a-zA-Z0-9_-]{33})/              // Fallback: try to match any 33-character ID
-        ];
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* Prevent scrolling */
+    }
 
-        for (const pattern of patterns) {
-          const match = url.match(pattern);
-          if (match && match[1]) {
-            // Remove the last character
-            return match[1];
-          }
-        }
+    #image-container {
+      width: 300px; 
+      height: 100px; 
+      overflow: hidden; /* Hide overflow */
+      position: relative; /* Position for absolute children */
+      border: 1px solid #ccc; /* Optional: border for visibility */
+      display: none; /* Hide the image container initially */
+    }
 
-        // If no match is found, return null
-        return null;
-      }
-  </script>
+    #image {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+
+    /* Back button styling */
+    #back-button {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Other styling as needed */
+  </style>
 </head>
-<body>
-  <!-- If there's an image, it will be displayed here: -->
-  <div id="image"></div>
-  <div id="path"></div>
+<body style="background: url('g1.jpg') no-repeat center center fixed;">
+  <!-- Back Button -->
+  <button id="back-button">Back to Menu</button>
+
+  <div id="image-container">
+    <img id="image" src="" alt="Zoomable Image" />
+  </div>
+
   <div id="timer"></div>
   <form action="" method="post" id="question-form">
     <fieldset>
-      <legend>Question</legend>
+      <legend><b>Question</b></legend>
       <p id="question"></p>
       <label for="solution" id="questionlabel">Loading question...</label>
-      <input type="text" id="solution" name="solution" placeholder="Your answer goes here..." required>
+      <input type="text" id="solution" name="solution" placeholder="Claim Your Victory Here..." style="font-family: 'Cinzel',serif;" required>
       <button type="submit">Submit</button>
       <div id="error" style="color: red;"></div>
+      <div class="correct" style="color: rgb(0, 107, 0); font-weight: bold;"></div>
+      <div id="path"></div>
     </fieldset>
   </form>
-  <div id="hint"></div>
-  <div class="correct" style="color: green;"></div>
+
   <script>
+    // Redirect if user is not logged in
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '../index.html';
+    }
+
+    // Back Button functionality
+    document.getElementById('back-button').addEventListener('click', () => {
+      window.location.href = './menu.html';  // Navigate to the menu page
+    });
+
+    function extractGoogleDriveFileId(url) {
+      const patterns = [
+        /\/file\/d\/([a-zA-Z0-9_-]{33})/,
+        /id=([a-zA-Z0-9_-]{33})/,
+        /([a-zA-Z0-9_-]{33})/
+      ];
+
+      for (const pattern of patterns) {
+        const match = url.match(pattern);
+        if (match && match[1]) {
+          return match[1];
+        }
+      }
+      return null;
+    }
+
     const questionForm = document.getElementById('question-form');
     const error = document.getElementById('error');
-
     const questionLabel = document.getElementById('questionlabel');
     const questionElement = document.getElementById('question');
-
-    let hint = null;
+    const imageContainer = document.getElementById('image-container');
+    const img = document.getElementById('image');
 
     function startCountdown(endTime) {
       let interval;
@@ -67,7 +110,6 @@
           if (timeDiff <= 0) {
               clearInterval(interval);
               document.getElementById('timer').innerText = '00:00';
-              document.getElementById('hint').innerText = hint ?? 'No hint available';
               return;
           }
 
@@ -76,7 +118,7 @@
 
           document.getElementById('timer').innerText = 
               `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        }
+      }
 
       updateTimer();
       setInterval(updateTimer, 1000);
@@ -88,38 +130,40 @@
         'Content-Type': 'application/json',
       },
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('You are not authorized to view this page');
-        }
-        return response.json();
-      })
-      .then(data => {
-        questionLabel.textContent = data.round.question;
-        if (data.round === '4') {
-          questionLabel.innerHTML = `<a href="${data.round.question}" target="_blank">Download the minigame here</a>`;
-        }
-        questionElement.textContent = data.round.hint;
-        if (data.round.image_url) {
-          const imageId = extractGoogleDriveFileId(data.round.image_url);
-          const imageUrl = `https://drive.google.com/thumbnail?id=${imageId}`;
-          document.getElementById('image').innerHTML = `<img src=${imageUrl}>`;
-        }
-        hint = data.round.questionHint;
-        document.getElementById('path').textContent = `Path: ${data.path}`;
-        const timeAlloted = data.round.round === '4' ? 20 * 60000 : 10 * 60000;
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('You are not authorized to view this page');
+      }
+      return response.json();
+    })
+    .then(data => {
+      questionLabel.textContent = data.round.question;
+      if (data.round.round === '4') {
+        questionLabel.innerHTML = `<a href="${data.round.question}" target="_blank">Download the minigame here</a>`;
+      }
+      questionElement.textContent = data.round.hint;
 
-        const endTime = data.round.startTime ? 
-          new Date(data.round.startTime).getTime() + timeAlloted : 
-          new Date().getTime() + timeAlloted;
+      if (data.round.image_url && data.round.round === '7') {
+        const imageId = extractGoogleDriveFileId(data.round.image_url);
+        const imageUrl = `https://drive.google.com/thumbnail?id=${imageId}`;
+        img.src = imageUrl; // Set the image source
+        imageContainer.style.display = 'block'; // Show image only in Round 7
+      } else {
+        imageContainer.style.display = 'none'; // Hide image if not Round 7
+      }
+      document.getElementById('path').textContent = `Path: ${data.path}`;
+      const timeAlloted = data.round.round === '4' ? 20 * 60000 : 10 * 60000;
 
-        startCountdown(new Date(endTime));
-      })
-      .catch(err => {
-        console.error(err);
-        // window.location.href = '../index.html';
-      });
-    
+      const endTime = data.round.startTime ? 
+        new Date(data.round.startTime).getTime() + timeAlloted : 
+        new Date().getTime() + timeAlloted;
+
+      startCountdown(new Date(endTime));
+    })
+    .catch(err => {
+      console.error(err);
+    });
+
     questionForm.addEventListener('submit', async e => {
       e.preventDefault();
 
@@ -144,7 +188,7 @@
         return;
       }
 
-      // update the round, by making a put request to round
+      // Update the round
       const roundResponse = await fetch('https://treasurehunt-backend-nine.vercel.app/event/round', {
         headers: {
           Authorization: token,
@@ -157,6 +201,47 @@
       if (roundData.newRound === '8') {
         window.location.href = './last-round-menu.html';
         return;
+      }
+
+      if (roundData.newRound === '7') {
+        // Handle Image Zooming with Mouse and Touch
+        let scale = 1.5; // Initial scale
+        let startDistance = 0;
+
+        img.addEventListener("wheel", (event) => {
+          event.preventDefault();
+          const delta = event.deltaY;
+          if (delta < 0 && scale < 3) {
+            scale += 0.1; // Zoom in
+          } else if (delta > 0 && scale > 1) {
+            scale -= 0.1; // Zoom out
+          }
+          img.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        });
+
+        img.addEventListener("touchmove", (event) => {
+          if (event.touches.length === 2) {
+            event.preventDefault();
+            const distance = Math.sqrt(
+              Math.pow(event.touches[0].pageX - event.touches[1].pageX, 2) +
+                Math.pow(event.touches[0].pageY - event.touches[1].pageY, 2)
+            );
+            if (startDistance === 0) {
+              startDistance = distance;
+            } else {
+              const scaleFactor = distance / startDistance;
+              scale = Math.max(1, Math.min(3, scale * scaleFactor)); // Restrict scale between 1 and 3
+              img.style.transform = `translate(-50%, -50%) scale(${scale})`;
+              startDistance = distance;
+            }
+          }
+        });
+
+        img.addEventListener("touchend", () => {
+          startDistance = 0; // Reset distance on touch end
+        });
+      } else {
+        imageContainer.style.display = 'none'; // Hide the image for other rounds
       }
 
       error.textContent = '';

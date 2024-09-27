@@ -10,6 +10,104 @@
             window.location.href = '../index.html';
         }
     </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Cinzel', serif;
+            background: url('g1.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #f0e6d2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            font-size: 4rem;
+            color: #c49c48;
+            text-shadow: 2px 2px 5px #000;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px; /* Add some space for the back button */
+        }
+
+        thead {
+            background-color: #c49c48;
+            color: #000;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border: 2px solid #c49c48;
+        }
+
+        th {
+            font-size: 1.5rem;
+            text-shadow: 1px 1px 3px #000;
+        }
+
+        td {
+            font-size: 1.2rem;
+            color: #f0e6d2;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+        }
+
+        /* Back button styling */
+        .back-button {
+            background-color: #c49c48;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 5px;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .back-button:hover {
+            background-color: #a37a37;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 3rem;
+            }
+
+            th, td {
+                padding: 10px;
+                font-size: 1rem;
+            }
+
+            table {
+                width: 90%;
+            }
+
+            .back-button {
+                font-size: 1rem;
+                padding: 8px 15px;
+            }
+        }
+    </style>
 </head>
 <body>
     <h1>Leaderboard</h1>
@@ -24,7 +122,13 @@
         </thead>
         <tbody id="leaderboard">
         </tbody>
+    </table>
+    <button class="back-button" onclick="goBackToMenu()">Back to Menu</button>
     <script>
+        function goBackToMenu() {
+            window.location.href = './menu.html'; // Update the path as needed
+        }
+        
         fetch('https://treasurehunt-backend-nine.vercel.app/leaderboard', {
             method: 'GET',
             headers: {

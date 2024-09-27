@@ -15,6 +15,45 @@
         window.location.href = '../last-round-menu.html';
       }    
   </script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* Prevent scrolling */
+    }
+
+    #image-container {
+      width: 300px; 
+      height: 100px; 
+      overflow: hidden; /* Hide overflow */
+      position: relative; /* Position for absolute children */
+      border: 1px solid #ccc; /* Optional: border for visibility */
+      display: none; /* Hide the image container initially */
+    }
+
+    #image {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+
+    /* Back button styling */
+    #back-button {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Other styling as needed */
+  </style>
 </head>
 <body>
   <!-- If there's an image, it will be displayed here: -->

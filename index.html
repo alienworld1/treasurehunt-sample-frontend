@@ -4,12 +4,142 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 </head>
+<style>
+  /* Game of Thrones Themed Login */
+  body {
+    margin: 0;
+    padding: 20px; /* Added padding for better spacing */
+    font-family: 'Cinzel', serif;
+    background: url('g1.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #f0e6d2;
+  }
+  
+  h1 {
+    font-size: 5rem;
+    text-align: center;
+    margin-bottom: 50px;
+    color: #c49c48;
+    text-shadow: 3px 3px 8px #000;
+    font-family: 'Game of Thrones', 'Cinzel', serif;
+    transition: transform 0.3s;
+  }
+  
+  h1:hover {
+    transform: scale(1.05);
+  }
+  
+  form {
+    background-color: rgba(255, 255, 255, 0.2); /* More opaque glass effect */
+    backdrop-filter: blur(15px); /* Increased blurring effect */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+    max-width: 400px;
+    width: 100%;
+    transition: background-color 0.3s;
+    margin: 20px; /* Added margin for spacing */
+  }
+  
+  form:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+  
+  .input-container {
+    position: relative;
+    margin-bottom: 25px; /* Space between input fields */
+  }
+  
+  .input-container input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid rgba(196, 156, 72, 0.5); /* Semi-transparent border */
+    border-radius: 25px; /* Rounded corners */
+    background: rgba(255, 255, 255, 0.1); /* Glass effect */
+    backdrop-filter: blur(10px); /* Blurring effect for glassmorphism */
+    color: #f0e6d2;
+    font-size: 1.1rem;
+    transition: border-color 0.3s, background-color 0.3s; /* Smooth transitions */
+    margin-bottom: 15px; /* Space between username and password fields */
+    box-sizing: border-box;
+  }
+  
+  .input-container input:focus {
+    border-color: rgba(240, 230, 210, 1); /* Solid color on focus */
+    background: rgba(255, 255, 255, 0.2); /* Slightly more opaque on focus */
+  }
+  
+  .input-container label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    color: #a39a85;
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+  
+  .input-container input:focus + label,
+  .input-container input:not(:placeholder-shown) + label {
+    top: -10px;
+    font-size: 0.9rem;
+    color: #c49c48;
+  }
+  
+  button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 5px;
+    background-color: #c49c48;
+    color: #000;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  button:hover {
+    background-color: #8a6b30;
+    transform: translateY(-2px);
+  }
+  
+  .error {
+    color: #e04c4c;
+    text-align: center;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+  
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 3rem;
+    }
+  
+    form {
+      padding: 25px;
+    }
+  
+    button {
+      font-size: 1rem;
+    }
+  }
+  
+</style>
 <body>
   <h1>Login</h1>
   <form action="" method="post" id="login-form">
-    <input type="text" id="username" name="username" placeholder="Username">
-    <input type="password" name="password" id="password" placeholder="Password">
+    <div class="input-container">
+      <input type="text" id="username" name="username" placeholder="Username">
+      <input type="password" name="password" id="password" placeholder="Password">
+    </div>
     <button type="submit">Login</button>
   </form>
   <div class="error" style="color: red;"></div>

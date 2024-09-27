@@ -11,15 +11,21 @@
       window.location.href = '../index.html';
     }
   </script>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <button id="logout">Log out</button>
-  <a href="./round.html" id="round">Round</a>
+<body style="background: url('g1.jpg') no-repeat center center fixed;">
+  <center>
+    <div class="container">
+      <button id="logout">Log out</button>
+      <a href="./round.html" id="round">Round</a>
+      <a href="./leaderboard.html">Leaderboard</a>
+      <a href="./map.html">Map</a>
+    </div>
+  </center>
   <div id="error"></div>
   <div id="timer"></div>
   <div id="venue"></div>
   <div id="path"></div>
-  <a href="./leaderboard.html">Leaderboard</a>
   <script>
     const logout = () => {
       localStorage.removeItem('token');
