@@ -182,7 +182,6 @@
           return response.json();
         })
         .then(data => {
-          console.log(data);
           if (data.completedRounds < 8) {
             window.location.href = './links/menu.html';
           } else if (data.completedRounds < 11) {
