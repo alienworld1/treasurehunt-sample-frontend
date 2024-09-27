@@ -93,6 +93,9 @@
       .then(data => {
         console.log(data);
         questionLabel.textContent = data.question;
+        if (data.round === '4') {
+          questionLabel.innerHTML = `<a href="${data.question}" target="_blank">Download the minigame here</a>`;
+        }
         questionElement.textContent = data.hint;
         if (data.image_url) {
           const imageId = extractGoogleDriveFileId(data.image_url);
