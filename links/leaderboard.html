@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '../index.html';
+        }
+    </script>
+</head>
+<body>
+    <h1>Leaderboard</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Username</th>
+                <th>Score</th>
+                <th>Rounds Completed</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboard">
+        </tbody>
+    <script>
+        fetch('https://treasurehunt-backend-nine.vercel.app/leaderboard', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: token,
+            },
+        })
+        .then((res) => res.json())
+        .then(data => {
+            const leaderboard = document.getElementById('leaderboard');
+            data.forEach((user, index) => {
+                const tr = document.createElement('tr');
+                const rank = document.createElement('td');
+                const username = document.createElement('td');
+                const score = document.createElement('td');
+                const rounds = document.createElement('td');
+                rank.textContent = index + 1;
+                username.textContent = user.user.username;
+                score.textContent = user.score;
+                rounds.textContent = user.roundsCompleted;
+                tr.appendChild(rank);
+                tr.appendChild(username);
+                tr.appendChild(score);
+                tr.appendChild(rounds);
+                leaderboard.appendChild(tr);
+            });
+        })
+    </script>
+</body>
+</html>
