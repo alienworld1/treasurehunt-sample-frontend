@@ -53,6 +53,7 @@
   </div>
 
   <div id="timer"></div>
+  <div id="round3img"></div>
   <form action="" method="post" id="question-form">
     <fieldset>
       <legend><b>Question</b></legend>
@@ -100,6 +101,7 @@
     const questionElement = document.getElementById('question');
     const imageContainer = document.getElementById('image-container');
     const img = document.getElementById('image');
+    const round3img = document.getElementById('round3img');
 
     function startCountdown(endTime) {
       let interval;
@@ -143,7 +145,13 @@
       }
       questionElement.textContent = data.round.hint;
 
-      if (data.round.image_url && ((data.round.round === '7' || data.round.round === '3'))) {
+      if (data.round.round === '3') {
+        const imageId = extractGoogleDriveFileId(data.round.image_url);
+        const imageUrl = `https://drive.google.com/thumbnail?id=${imageId}`;
+        round3img.innerHTML = `<img src=${imageUrl}>`;
+      }
+
+      if (data.round.image_url && data.round.round === '7') {
         const imageId = extractGoogleDriveFileId(data.round.image_url);
         const imageUrl = `https://drive.google.com/thumbnail?id=${imageId}`;
         img.src = imageUrl; // Set the image source
